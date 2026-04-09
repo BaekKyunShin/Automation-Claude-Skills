@@ -4,7 +4,7 @@ These three queries validate the skill's behavior across different scenarios. Us
 
 ---
 
-## Query 1 — Install-ready, Korean
+## Query 1 — Korean, high-confidence match expected
 
 ```
 /skill-finder PDF 생성 스킬
@@ -13,20 +13,20 @@ These three queries validate the skill's behavior across different scenarios. Us
 **What to check:**
 
 - Response is in **Korean** (matches query language).
-- **Embedded group is populated first**, with `anthropics/skills` PDF skill in position 1.
-- Install command is shown **verbatim**:
+- A single ranked **매치 결과** table, with `anthropics/skills` PDF skill in position 1.
+- Its `Action` cell shows the install command verbatim:
   ```
   /plugin marketplace add anthropics/skills
   /plugin install pdf@anthropics-skills
   ```
-- Index group may include 1–2 additional references from awesome lists.
+- Other entries below it may come from any of the 9 sources — some with install commands, some with direct URLs — ranked by match strength.
 - Total entries ≤ 7.
 
-**Pass criterion**: the user can copy-paste the install command and it works on the next Claude Code session.
+**Pass criterion**: the user can copy-paste the row-1 install command and it works on the next Claude Code session.
 
 ---
 
-## Query 2 — Broad exploration, English
+## Query 2 — English, broad exploration
 
 ```
 /skill-finder Slack automation
@@ -35,12 +35,11 @@ These three queries validate the skill's behavior across different scenarios. Us
 **What to check:**
 
 - Response is in **English** (matches query language).
-- **Index group is populated first or equally**, with `ComposioHQ/awesome-claude-skills` as a top source (strongest for SaaS / API automation).
-- Embedded group may still have entries from `sickn33` or `alirezarezvani` if they include Slack-related skills.
-- Each Index entry includes a **direct link** to the external source (not just the awesome list URL).
-- Each Embedded entry includes an install command.
+- The single result table includes Slack-related entries drawn from across the 9 sources. `ComposioHQ/awesome-claude-skills` is typically a top source for SaaS automation, but the ranking is determined by match strength, not source type.
+- The `Action` column is populated correctly for each row: install commands for rows backed by an embedded skill, direct URLs for rows drawn from awesome lists.
+- **Never link to the awesome list URL itself** — always follow the link to the actual skill source.
 
-**Pass criterion**: the user gets at least 2 actionable options across both groups.
+**Pass criterion**: the user gets at least 2 actionable rows (install command or direct skill URL), regardless of which source they came from.
 
 ---
 
@@ -53,8 +52,7 @@ These three queries validate the skill's behavior across different scenarios. Us
 **What to check:**
 
 - Response is in **Korean**.
-- Embedded group is **empty or shows "없음"**.
-- Output uses the fallback template:
+- The **매치 결과** table is replaced by the fallback template:
   ```
   ## 매치 없음 (No strong match)
 
@@ -77,7 +75,7 @@ In a Claude Code session with this project loaded:
 
 1. Type one of the queries above.
 2. Compare the output against the "What to check" bullets.
-3. If any check fails, inspect `SKILL.md` (workflow) or `references/sources.md` (routing) and fix.
+3. If any check fails, inspect `SKILL.md` (workflow) or `references/sources.md` (source metadata) and fix.
 
 ## Adding new sample queries
 

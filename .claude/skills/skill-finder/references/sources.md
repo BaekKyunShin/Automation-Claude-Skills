@@ -12,20 +12,12 @@ This file catalogs the 9 verified sources that `skill-finder` searches. All entr
 
 ---
 
-## Routing hints
+The 9 sources are split into two groups **by their storage structure**, which determines how to search them:
 
-Use this table to prioritize which sources to check first based on the user's intent. Note: `skill-finder` searches **all 9** sources by default, but you can weight early hits from these.
+- **Group A (Embedded)** — repos that contain actual `SKILL.md` files. Search method: fetch the repo tree or skills directory, match skill names / descriptions against the query.
+- **Group B (Index)** — awesome lists / catalogs that link to external skills. Search method: fetch the README, scan link text and surrounding descriptions for matches, then follow links to the actual source for verification.
 
-| User intent | First check |
-|---|---|
-| "바로 설치해서 쓰고 싶다" / "install now" | Group A (Embedded) |
-| "어떤 스킬이 있어?" / "what's available?" | Group B (Index) — broader coverage |
-| "공식만" / "official only" | A1 (anthropics), A4 (huggingface) |
-| "최신 스킬" / "latest" | A2 (sickn33), A1 (anthropics) — most active push dates |
-| "SaaS / API 연동" / "SaaS integration" | B1 (ComposioHQ) |
-| "ML / 데이터 / HF" | A4 (huggingface) |
-| "멀티 에이전트" / "multi-agent" | A2 (sickn33), B3 (VoltAgent) |
-| 한국어 쿼리 / Korean query | 모든 소스 검색, 결과는 한국어 출력 |
+The groups are **not** used to rank or group the output. `skill-finder` produces a single ranked list across all 9 sources.
 
 ---
 

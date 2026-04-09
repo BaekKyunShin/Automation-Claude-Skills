@@ -17,54 +17,55 @@ $ARGUMENTS
 
 ## Workflow
 
-### Step 1 — Parse the query
+### Step 1 — Load the source guide
 
-Extract from `$ARGUMENTS`:
-- **Domain / task**: what the user wants a skill for (e.g. "PDF generation", "Slack automation", "Korean HWP documents")
-- **Intent**: `install-ready` (wants to use immediately) vs `explore` (wants to browse options)
-- **Language**: Korean or English — the response must match the user's language
+Read [references/sources.md](references/sources.md). This file lists the 9 verified sources with install commands and search notes. **Do not hard-code source URLs in this file** — always consult `sources.md`, so updates stay in one place.
 
-### Step 2 — Load the source guide
+Note the two groups defined in `sources.md`:
+- **Group A (Embedded)**: repos that contain actual `SKILL.md` files. Search method: fetch the repo tree or skills directory, look for skill names matching the query.
+- **Group B (Index)**: awesome lists / catalogs of external links. Search method: fetch the README, scan link text and descriptions for matches.
 
-Read [references/sources.md](references/sources.md). This file lists the 9 verified sources, their install commands, domain strengths, and routing hints. **Do not hard-code source URLs here** — always consult that file, so updates stay in one place.
+The groups only describe **how to search each source**, not how to present results.
 
-### Step 3 — Search all 9 sources
+### Step 2 — Search all 9 sources exhaustively
 
-Search exhaustively (no tiered stop conditions). Use parallel tool calls wherever possible.
+Search every source. Use parallel tool calls wherever possible. Match the response language to the query language (Korean in, Korean out).
 
-**For Group A (Embedded — actual SKILL.md files in repo):**
-1. `anthropics/skills` — fetch repo tree or README, look for matching skill names
-2. `sickn33/antigravity-awesome-skills` — largest catalog, search the skills index
-3. `alirezarezvani/claude-skills` — browse the 9 domain folders
-4. `huggingface/skills` — only if query relates to ML / data / HF ecosystem
+1. `anthropics/skills` (Group A) — fetch repo tree, look for matching skill names
+2. `sickn33/antigravity-awesome-skills` (Group A) — largest catalog, search the skills index
+3. `alirezarezvani/claude-skills` (Group A) — browse the 9 domain folders
+4. `huggingface/skills` (Group A) — if query relates to ML / data / HF ecosystem
+5. `ComposioHQ/awesome-claude-skills` (Group B) — best for SaaS / API integrations
+6. `hesreallyhim/awesome-claude-code` (Group B) — broad Claude Code curation
+7. `VoltAgent/awesome-agent-skills` (Group B) — 1,000+ multi-agent entries
+8. `travisvn/awesome-claude-skills` (Group B) — Claude-only curated set
+9. `BehiSecc/awesome-claude-skills` (Group B) — Claude-first with multi-tool refs
 
-**For Group B (Index — awesome lists with external links):**
-5. `ComposioHQ/awesome-claude-skills` — best for SaaS / API integrations
-6. `hesreallyhim/awesome-claude-code` — broad Claude Code curation
-7. `VoltAgent/awesome-agent-skills` — 1,000+ multi-agent entries
-8. `travisvn/awesome-claude-skills` — Claude-only curated set
-9. `BehiSecc/awesome-claude-skills` — Claude-first with multi-tool refs
+**If all 9 return weak signals**, fall back to the GitHub direct search patterns listed in `sources.md` (`path:SKILL.md "<keyword>"` etc.).
 
-**If all 9 are weak**, fall back to GitHub direct search using the patterns in `references/sources.md` (`path:SKILL.md "<keyword>"` etc.).
+### Step 3 — Rank the matches
 
-### Step 4 — Rank and group
+Produce a **single ranked list** across all 9 sources. Rank by match strength:
 
-- **Group A (Embedded)** is listed first. These skills can be installed immediately.
-- **Group B (Index)** is listed second. These are pointers to external repos that still need verification.
-- Within each group, rank by match strength:
-  1. Exact keyword match in skill name
-  2. Exact keyword match in description
-  3. Related-term match
-  4. Weak signal (category only)
-- **Cap the output at 7 total entries** across both groups. If there are more, mention the count in the summary.
+1. Exact keyword match in skill name
+2. Exact keyword match in description
+3. Related-term match
+4. Weak signal (category only)
 
-### Step 5 — Cross-verify install commands
+**Cap the output at 7 total entries.** If more exist, mention the residual count in the verdict line.
 
-Before outputting any install command, confirm it matches the source repo's README. **Never fabricate an install path.** If an install command is not clearly documented, output `(manual: git clone <url>)` instead.
+### Step 4 — Cross-verify the `Action` value
 
-### Step 6 — Output
+For each entry, populate the `Action` column with one of:
+- A copy-paste-ready install command (e.g. `/plugin marketplace add anthropics/skills` then `/plugin install pdf@anthropics-skills`) — confirm the command matches the source repo's README.
+- A direct URL to the skill — when the entry is an Index entry, link to the actual destination, not the awesome list.
+- `(manual: git clone <url>)` — only when no install path is documented.
 
-Respond in the same language as the user's query. Use the format below verbatim.
+**Never fabricate install commands.** When uncertain, fall back to the `(manual: ...)` form.
+
+### Step 5 — Output
+
+Respond in the user's language. Use the format below verbatim.
 
 ## Output format
 
@@ -72,23 +73,17 @@ Respond in the same language as the user's query. Use the format below verbatim.
 ## 판정 (1-line verdict)
 <One sentence summary. E.g. "Anthropic 공식 docx 스킬이 1순위, 그 외 2개 관련 스킬 발견.">
 
-## 🟢 Embedded (바로 설치 가능 / Ready to install)
+## 매치 결과
 
-| # | Skill | Source | ⭐ | Install | Match reason |
+| # | Skill | 출처 | ⭐ | Action | 매치 이유 |
 |---|---|---|---|---|---|
-| 1 | <skill-id> | <owner/repo> | <stars> | `<install command>` | <why it matches> |
-
-## 🔵 Index (외부 링크 / Awesome list entries)
-
-| # | Skill / Entry | Listed in | Link | Match reason |
-|---|---|---|---|---|
-| ... | ... | ... | ... | ... |
+| 1 | <skill-id> | <owner/repo> | <stars> | `<install command>` or `<https://url>` | <why it matches> |
 
 ## Next action
 <One sentence. E.g. "1번 스킬을 바로 설치해서 써보세요." or "강한 매치가 없으므로 직접 새 스킬을 만드는 것이 빠릅니다.">
 ```
 
-**If no strong match in any group**, replace the tables with:
+**If no strong match anywhere**, replace the result table with:
 
 ```
 ## 매치 없음 (No strong match)
@@ -107,11 +102,10 @@ Respond in the same language as the user's query. Use the format below verbatim.
 - **Cross-verify install commands.** Never fabricate. If uncertain, output `(manual: git clone …)`.
 - **Match user language.** Korean query → Korean response. English query → English response.
 - **Honest reporting.** If no match, say "없음 / No strong match" and suggest a fallback.
-- **Prefer Embedded over Index** when both have matches (user can install right away).
-- **Cap output at 7 total entries** across both groups.
+- **Cap output at 7 total entries.**
 - **Respect context: fork.** You are running in a forked subagent. Your final answer is the only thing the main conversation sees — make it self-contained.
 
 ## Additional resources
 
-- [references/sources.md](references/sources.md) — The 9 verified sources with metadata, routing hints, and GitHub search patterns.
+- [references/sources.md](references/sources.md) — The 9 verified sources with metadata and GitHub search patterns.
 - [examples/sample-queries.md](examples/sample-queries.md) — Three sample queries and expected output shapes.
