@@ -1,60 +1,60 @@
-# Sample Queries for skill-finder
+# skill-finder 샘플 쿼리
 
-These three queries validate the skill's behavior across different scenarios. Use them as smoke tests after editing `SKILL.md` or `references/sources.md`.
+이 3개 쿼리는 다양한 시나리오에서 스킬의 동작을 검증합니다. `SKILL.md` 또는 `references/sources.md`를 수정한 후 smoke test로 사용하세요.
 
 ---
 
-## Query 1 — Korean, high-confidence match expected
+## Query 1 — 한국어, 높은 확신도의 매치 기대
 
 ```
 /skill-finder PDF 생성 스킬
 ```
 
-**What to check:**
+**확인할 것:**
 
-- Response is in **Korean** (matches query language).
-- A single ranked **매치 결과** table, with `anthropics/skills` PDF skill in position 1.
-- Its `Action` cell shows the install command verbatim:
+- 응답이 **한국어**여야 함 (쿼리 언어 매칭).
+- 단일 랭킹 **매치 결과** 테이블에서 `anthropics/skills`의 PDF 스킬이 1위.
+- `Action` 셀에 설치 명령이 verbatim으로 표시:
   ```
   /plugin marketplace add anthropics/skills
   /plugin install pdf@anthropics-skills
   ```
-- Other entries below it may come from any of the 9 sources — some with install commands, some with direct URLs — ranked by match strength.
-- Total entries ≤ 7.
+- 그 아래 엔트리는 9개 소스 어디서든 올 수 있음 — 일부는 설치 명령, 일부는 직접 URL — 매치 강도 순으로 랭킹.
+- 총 엔트리 ≤ 7개.
 
-**Pass criterion**: the user can copy-paste the row-1 install command and it works on the next Claude Code session.
+**통과 기준**: 사용자가 1행의 설치 명령을 복사·붙여넣기하면 다음 Claude Code 세션에서 동작해야 함.
 
 ---
 
-## Query 2 — English, broad exploration
+## Query 2 — 영어, 광범위한 탐색
 
 ```
 /skill-finder Slack automation
 ```
 
-**What to check:**
+**확인할 것:**
 
-- Response is in **English** (matches query language).
-- The single result table includes Slack-related entries drawn from across the 9 sources. `ComposioHQ/awesome-claude-skills` is typically a top source for SaaS automation, but the ranking is determined by match strength, not source type.
-- The `Action` column is populated correctly for each row: install commands for rows backed by an embedded skill, direct URLs for rows drawn from awesome lists.
-- **Never link to the awesome list URL itself** — always follow the link to the actual skill source.
+- 응답이 **영어**여야 함 (쿼리 언어 매칭).
+- 단일 결과 테이블에 9개 소스 전체에서 나온 Slack 관련 엔트리가 포함됨. SaaS 자동화 쿼리에서는 보통 `ComposioHQ/awesome-claude-skills`가 상위 소스이지만, 랭킹은 매치 강도로 결정되지 소스 종류로 결정되지 않음.
+- 각 행의 `Action` 컬럼이 올바르게 채워짐: embedded 스킬이 있는 행은 설치 명령, awesome list에서 가져온 행은 직접 URL.
+- **awesome list URL 자체를 절대 링크하지 말 것** — 항상 실제 스킬 소스로 링크를 따라가야 함.
 
-**Pass criterion**: the user gets at least 2 actionable rows (install command or direct skill URL), regardless of which source they came from.
+**통과 기준**: 소스 종류와 상관없이 최소 2개의 실행 가능한 행(설치 명령 또는 직접 스킬 URL)을 사용자가 얻어야 함.
 
 ---
 
-## Query 3 — No strong match, Korean (regression test)
+## Query 3 — 강한 매치 없음, 한국어 (회귀 테스트)
 
 ```
 /skill-finder 한글 HWP 문서 생성
 ```
 
-**What to check:**
+**확인할 것:**
 
-- Response is in **Korean**.
-- The **매치 결과** table is replaced by the fallback template:
+- 응답이 **한국어**여야 함.
+- **매치 결과** 테이블이 폴백 템플릿으로 대체됨:
   ```
-  ## 매치 없음 (No strong match)
+  ## 매치 없음
 
   가장 가까운 2개 대안:
   - anthropics/skills의 docx 스킬 — <이유>
@@ -63,20 +63,20 @@ These three queries validate the skill's behavior across different scenarios. Us
   대안 경로:
   pyhwpx 또는 python-hwpx 라이브러리를 래핑한 새 스킬을 만드는 것이 빠릅니다.
   ```
-- **No fabricated install commands** for skills that don't exist.
+- **존재하지 않는 스킬의 설치 명령을 날조하지 말 것**.
 
-**Pass criterion**: the skill honestly reports failure and suggests the correct fallback path (build a new skill using pyhwpx-class libraries).
+**통과 기준**: 스킬이 정직하게 실패를 보고하고 올바른 폴백 경로(pyhwpx 계열 라이브러리로 새 스킬 구축)를 제안해야 함.
 
 ---
 
-## How to run
+## 실행 방법
 
-In a Claude Code session with this project loaded:
+이 프로젝트가 로드된 Claude Code 세션에서:
 
-1. Type one of the queries above.
-2. Compare the output against the "What to check" bullets.
-3. If any check fails, inspect `SKILL.md` (workflow) or `references/sources.md` (source metadata) and fix.
+1. 위 쿼리 중 하나를 입력.
+2. "확인할 것" 목록과 출력을 비교.
+3. 실패한 체크가 있으면 `SKILL.md` (워크플로우) 또는 `references/sources.md` (소스 메타데이터)를 검사 후 수정.
 
-## Adding new sample queries
+## 새 샘플 쿼리 추가
 
-When you discover a new edge case (e.g. a query that returns too many results, or fails silently), add it here with the same format: query → expected behavior → pass criterion.
+새로운 엣지 케이스를 발견하면 (예: 너무 많은 결과를 반환하는 쿼리, 조용히 실패하는 쿼리) 같은 포맷으로 여기에 추가: 쿼리 → 예상 동작 → 통과 기준.
