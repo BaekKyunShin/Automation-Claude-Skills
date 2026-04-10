@@ -20,19 +20,20 @@ def extract_markdown(hwpx_path: str) -> str:
 
 
 def extract_json(hwpx_path: str) -> dict:
-    """구조화된 JSON으로 추출."""
-    extractor = TextExtractor.open(hwpx_path)
+    """구조화된 JSON으로 추출. HwpxDocument API 사용."""
+    doc = HwpxDocument.open(hwpx_path)
     result = {"sections": []}
 
-    for section in extractor.iter_sections():
+    for si, section in enumerate(doc.sections):
         sec_data = {"paragraphs": []}
-        for para in extractor.iter_paragraphs(section):
-            text = extractor.paragraph_text(para)
-            if text:
-                sec_data["paragraphs"].append({"text": text})
+        for para in doc.paragraphs:
+            text = para.text
+            if text and text.strip():
+                sec_data["paragraphs"].append({"text": text.strip()})
         result["sections"].append(sec_data)
+        break  # 현재 단일 섹션만 지원
 
-    extractor.close()
+    doc.close()
     return result
 
 

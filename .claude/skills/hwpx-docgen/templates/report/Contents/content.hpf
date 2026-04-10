@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<hp:package xmlns:hp="urn:hancom:hwpml:2011">
-  <hp:fileList>
-    <hp:file href="header.xml" type="header"/>
-    <hp:file href="section0.xml" type="section"/>
-  </hp:fileList>
-</hp:package>

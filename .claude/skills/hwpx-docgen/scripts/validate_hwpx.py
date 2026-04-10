@@ -34,12 +34,11 @@ def validate(hwpx_path: str):
     try:
         doc = HwpxDocument.open(hwpx_path)
         report = doc.validate()
-        if hasattr(report, "errors") and report.errors:
-            for err in report.errors:
-                all_issues.append(("FAIL", str(err)))
-        if hasattr(report, "warnings") and report.warnings:
-            for warn in report.warnings:
-                all_issues.append(("WARN", str(warn)))
+        if report.issues:
+            for issue in report.issues:
+                all_issues.append(("WARN", str(issue)))
+        if not report.ok:
+            all_issues.append(("FAIL", "python-hwpx validate() 실패"))
     except Exception as e:
         all_issues.append(("FAIL", f"문서 로드 실패: {e}"))
         for severity, msg in all_issues:
