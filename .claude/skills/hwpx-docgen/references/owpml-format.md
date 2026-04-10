@@ -34,7 +34,7 @@ xmlns:hh="urn:hancom:hwpml:2011:head"    <!-- header.xml 루트 -->
 xmlns:hs="urn:hancom:hwpml:2011:section" <!-- section XML 루트 -->
 ```
 
-**주의**: lxml로 XML 편집 후 네임스페이스 선언이 누락되거나 `ns0:`, `ns1:` 접두사로 바뀔 수 있음. 편집 후 반드시 `fix_namespaces.py` 실행.
+**주의**: python-hwpx가 네임스페이스를 내부 관리하므로 별도 정리 불필요. 직접 XML을 편집할 경우에만 접두사 깨짐에 주의.
 
 ---
 

@@ -27,11 +27,11 @@ def analyze(hwpx_path: str):
     print(f"[단락] {len(paragraphs)}개")
 
     # 표 개수
-    table_count = 0
-    for sec in sections:
-        finder_results = doc.oxml.findall(".//{urn:hancom:hwpml:2011}tbl")
-        table_count = len(finder_results) if finder_results else 0
-        break
+    try:
+        table_map = doc.get_table_map()
+        table_count = len(table_map)
+    except Exception:
+        table_count = 0
     print(f"[표] {table_count}개")
 
     # 문자 속성

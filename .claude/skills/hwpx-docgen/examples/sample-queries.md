@@ -40,7 +40,7 @@ SKILL.md 또는 scripts를 수정한 후 smoke test로 사용하세요.
 ```
 
 **확인할 것:**
-- `unpack_hwpx.py` → `zip_replace_all.py` → `fix_namespaces.py` → `validate_hwpx.py` → `pack_hwpx.py` 순서 실행
+- `unpack_hwpx.py` → `zip_replace_all.py` → `validate_hwpx.py` → `pack_hwpx.py` 순서 실행
 - 모든 XML 파일에서 치환 적용 (ZIP-level 전역)
 - 네임스페이스 깨지지 않음
 

@@ -90,7 +90,7 @@ python scripts/unpack_hwpx.py input.hwpx work/
 ### Step 2: 분석
 
 ```bash
-python scripts/analyze_template.py work/
+python scripts/analyze_template.py input.hwpx
 ```
 
 현재 구조(스타일, 단락, 표, 플레이스홀더)를 파악합니다.
@@ -104,13 +104,12 @@ python scripts/analyze_template.py work/
 - **구조 변경** → `work/Contents/section0.xml`을 Read → Edit으로 직접 수정
 - **표 수정/추가** → Workflow 4로 위임
 
-### Step 4: 검증 + 리패킹
+### Step 4: 리패킹 + 검증
 
 ```bash
-python scripts/fix_namespaces.py work/
-python scripts/validate_hwpx.py work/
-python scripts/page_guard.py work/ --ref-pages <원본_페이지_수>
 python scripts/pack_hwpx.py work/ output.hwpx
+python scripts/validate_hwpx.py output.hwpx
+python scripts/page_guard.py output.hwpx --ref-pages <원본_페이지_수>
 ```
 
 ---

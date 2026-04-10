@@ -33,14 +33,7 @@ def replace_all(work_dir: str, mapping: dict, auto_fix_ns: bool = True):
     else:
         print("치환 대상 없음")
 
-    if auto_fix_ns and changed_files:
-        print("\n네임스페이스 자동 정리 실행...")
-        # fix_namespaces 직접 호출
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        fix_ns_path = os.path.join(script_dir, "fix_namespaces.py")
-        if os.path.isfile(fix_ns_path):
-            os.system(f'python3 "{fix_ns_path}" "{work_dir}"')
-
+    # python-hwpx가 네임스페이스를 내부 관리하므로 별도 정리 불필요
     return changed_files
 
 
