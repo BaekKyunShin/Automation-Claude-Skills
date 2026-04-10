@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hs:sec xmlns:hs="urn:hancom:hwpml:2011:section"
+        xmlns:hp="urn:hancom:hwpml:2011"
+        xmlns:hc="urn:hancom:hwpml:2011:common">
+
+  <!-- secPr (절대 삭제 금지) -->
+  <hp:p id="0" paraPrIDRef="0" styleIDRef="0">
+    <hp:secPr>
+      <hp:pageWidth val="59528"/>
+      <hp:pageHeight val="84188"/>
+      <hp:marginTop val="5668"/>
+      <hp:marginBottom val="4252"/>
+      <hp:marginLeft val="8504"/>
+      <hp:marginRight val="8504"/>
+      <hp:marginHeader val="4252"/>
+      <hp:marginFooter val="4252"/>
+      <hp:marginGutter val="0"/>
+      <hp:colPr type="none" colCount="1" sameSz="0" sameGap="0"/>
+    </hp:secPr>
+  </hp:p>
+
+  <!-- 제안서 제목 -->
+  <hp:p id="1" paraPrIDRef="1" styleIDRef="1">
+    <hp:r charPrIDRef="1">
+      <hp:t>{{제목}}</hp:t>
+    </hp:r>
+  </hp:p>
+
+  <!-- 부제 -->
+  <hp:p id="2" paraPrIDRef="1" styleIDRef="2">
+    <hp:r charPrIDRef="2">
+      <hp:t>{{부제}}</hp:t>
+    </hp:r>
+  </hp:p>
+
+  <!-- 제출 정보 -->
+  <hp:p id="3" paraPrIDRef="1" styleIDRef="0">
+    <hp:r charPrIDRef="0">
+      <hp:t>{{기관명}}  |  {{날짜}}</hp:t>
+    </hp:r>
+  </hp:p>
+
+  <!-- 구분선 -->
+  <hp:p id="4" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t/></hp:r>
+  </hp:p>
+
+  <!-- 1. 개요 -->
+  <hp:p id="5" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="2"><hp:t>1. 개요</hp:t></hp:r>
+  </hp:p>
+  <hp:p id="6" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t>{{개요}}</hp:t></hp:r>
+  </hp:p>
+
+  <!-- 2. 목적 -->
+  <hp:p id="7" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="2"><hp:t>2. 목적</hp:t></hp:r>
+  </hp:p>
+  <hp:p id="8" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t>{{목적}}</hp:t></hp:r>
+  </hp:p>
+
+  <!-- 3. 세부 내용 -->
+  <hp:p id="9" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="2"><hp:t>3. 세부 내용</hp:t></hp:r>
+  </hp:p>
+  <hp:p id="10" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t>{{세부내용}}</hp:t></hp:r>
+  </hp:p>
+
+  <!-- 4. 예산 -->
+  <hp:p id="11" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="2"><hp:t>4. 예산</hp:t></hp:r>
+  </hp:p>
+  <hp:p id="12" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t>{{예산}}</hp:t></hp:r>
+  </hp:p>
+
+  <!-- 5. 기대 효과 -->
+  <hp:p id="13" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="2"><hp:t>5. 기대 효과</hp:t></hp:r>
+  </hp:p>
+  <hp:p id="14" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t>{{기대효과}}</hp:t></hp:r>
+  </hp:p>
+
+</hs:sec>

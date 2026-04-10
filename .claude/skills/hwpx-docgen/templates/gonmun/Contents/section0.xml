@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hs:sec xmlns:hs="urn:hancom:hwpml:2011:section"
+        xmlns:hp="urn:hancom:hwpml:2011"
+        xmlns:hc="urn:hancom:hwpml:2011:common">
+
+  <!-- secPr (절대 삭제 금지) -->
+  <hp:p id="0" paraPrIDRef="0" styleIDRef="0">
+    <hp:secPr>
+      <hp:pageWidth val="59528"/>
+      <hp:pageHeight val="84188"/>
+      <hp:marginTop val="5668"/>
+      <hp:marginBottom val="4252"/>
+      <hp:marginLeft val="8504"/>
+      <hp:marginRight val="8504"/>
+      <hp:marginHeader val="4252"/>
+      <hp:marginFooter val="4252"/>
+      <hp:marginGutter val="0"/>
+      <hp:colPr type="none" colCount="1" sameSz="0" sameGap="0"/>
+    </hp:secPr>
+  </hp:p>
+
+  <!-- 발신기관 -->
+  <hp:p id="1" paraPrIDRef="1" styleIDRef="1">
+    <hp:r charPrIDRef="1">
+      <hp:t>{{발신기관}}</hp:t>
+    </hp:r>
+  </hp:p>
+
+  <!-- 수신 -->
+  <hp:p id="2" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="0">
+      <hp:t>수신: {{수신}}</hp:t>
+    </hp:r>
+  </hp:p>
+
+  <!-- 제목 -->
+  <hp:p id="3" paraPrIDRef="1" styleIDRef="1">
+    <hp:r charPrIDRef="2">
+      <hp:t>{{제목}}</hp:t>
+    </hp:r>
+  </hp:p>
+
+  <!-- 본문 -->
+  <hp:p id="4" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0">
+      <hp:t>{{본문}}</hp:t>
+    </hp:r>
+  </hp:p>
+
+  <!-- 날짜 -->
+  <hp:p id="5" paraPrIDRef="1" styleIDRef="0">
+    <hp:r charPrIDRef="0">
+      <hp:t>{{날짜}}</hp:t>
+    </hp:r>
+  </hp:p>
+
+  <!-- 발신자 -->
+  <hp:p id="6" paraPrIDRef="1" styleIDRef="0">
+    <hp:r charPrIDRef="2">
+      <hp:t>{{발신자}}</hp:t>
+    </hp:r>
+  </hp:p>
+
+</hs:sec>

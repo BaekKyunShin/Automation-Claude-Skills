@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hh:head xmlns:hh="urn:hancom:hwpml:2011:head"
+         xmlns:hc="urn:hancom:hwpml:2011:common">
+
+  <!-- 문자 속성 -->
+  <hh:charProperties>
+    <!-- 기본 본문 (10pt, 함초롬바탕) -->
+    <hh:charPr id="0">
+      <hh:fontRef hangul="함초롬바탕" latin="Times New Roman"/>
+      <hh:fontSize val="1000"/>
+      <hh:bold val="false"/>
+      <hh:italic val="false"/>
+    </hh:charPr>
+    <!-- 제목 (16pt, 함초롬돋움, 굵게) -->
+    <hh:charPr id="1">
+      <hh:fontRef hangul="함초롬돋움" latin="Arial"/>
+      <hh:fontSize val="1600"/>
+      <hh:bold val="true"/>
+      <hh:italic val="false"/>
+    </hh:charPr>
+    <!-- 부제목 (12pt, 함초롬돋움) -->
+    <hh:charPr id="2">
+      <hh:fontRef hangul="함초롬돋움" latin="Arial"/>
+      <hh:fontSize val="1200"/>
+      <hh:bold val="true"/>
+      <hh:italic val="false"/>
+    </hh:charPr>
+    <!-- 표 헤더 (10pt, 함초롬돋움, 굵게) -->
+    <hh:charPr id="3">
+      <hh:fontRef hangul="함초롬돋움" latin="Arial"/>
+      <hh:fontSize val="1000"/>
+      <hh:bold val="true"/>
+      <hh:italic val="false"/>
+    </hh:charPr>
+  </hh:charProperties>
+
+  <!-- 단락 속성 -->
+  <hh:paraProperties>
+    <!-- 기본 본문 (양쪽정렬, 줄간격 160%) -->
+    <hh:paraPr id="0">
+      <hh:align val="justify"/>
+      <hh:lineSpacing type="percent" val="160"/>
+      <hh:margin left="0" right="0" indent="0"/>
+    </hh:paraPr>
+    <!-- 제목 (가운데정렬) -->
+    <hh:paraPr id="1">
+      <hh:align val="center"/>
+      <hh:lineSpacing type="percent" val="160"/>
+      <hh:margin left="0" right="0" indent="0"/>
+    </hh:paraPr>
+    <!-- 좌측정렬 -->
+    <hh:paraPr id="2">
+      <hh:align val="left"/>
+      <hh:lineSpacing type="percent" val="160"/>
+      <hh:margin left="0" right="0" indent="0"/>
+    </hh:paraPr>
+    <!-- 우측정렬 (서명용) -->
+    <hh:paraPr id="3">
+      <hh:align val="right"/>
+      <hh:lineSpacing type="percent" val="160"/>
+      <hh:margin left="0" right="0" indent="0"/>
+    </hh:paraPr>
+  </hh:paraProperties>
+
+  <!-- 스타일 -->
+  <hh:styles>
+    <hh:style id="0" name="바탕글" charPrIDRef="0" paraPrIDRef="0"/>
+    <hh:style id="1" name="제목" charPrIDRef="1" paraPrIDRef="1"/>
+    <hh:style id="2" name="부제목" charPrIDRef="2" paraPrIDRef="2"/>
+  </hh:styles>
+
+  <!-- 테두리/채움 -->
+  <hh:borderFills>
+    <!-- 기본 (테두리 없음, 흰 배경) -->
+    <hh:borderFill id="1">
+      <hh:border>
+        <hh:left type="none" width="0" color="#000000"/>
+        <hh:right type="none" width="0" color="#000000"/>
+        <hh:top type="none" width="0" color="#000000"/>
+        <hh:bottom type="none" width="0" color="#000000"/>
+      </hh:border>
+      <hh:fillColor val="#FFFFFF"/>
+    </hh:borderFill>
+    <!-- 표 셀 (실선 테두리, 흰 배경) -->
+    <hh:borderFill id="2">
+      <hh:border>
+        <hh:left type="thin" width="1" color="#000000"/>
+        <hh:right type="thin" width="1" color="#000000"/>
+        <hh:top type="thin" width="1" color="#000000"/>
+        <hh:bottom type="thin" width="1" color="#000000"/>
+      </hh:border>
+      <hh:fillColor val="#FFFFFF"/>
+    </hh:borderFill>
+    <!-- 표 헤더 (실선 테두리, 회색 배경) -->
+    <hh:borderFill id="3">
+      <hh:border>
+        <hh:left type="thin" width="1" color="#000000"/>
+        <hh:right type="thin" width="1" color="#000000"/>
+        <hh:top type="thin" width="1" color="#000000"/>
+        <hh:bottom type="thin" width="1" color="#000000"/>
+      </hh:border>
+      <hh:fillColor val="#E6E6E6"/>
+    </hh:borderFill>
+  </hh:borderFills>
+
+</hh:head>
