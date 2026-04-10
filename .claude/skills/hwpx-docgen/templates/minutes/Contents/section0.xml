@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hs:sec xmlns:hs="urn:hancom:hwpml:2011:section"
+        xmlns:hp="urn:hancom:hwpml:2011"
+        xmlns:hc="urn:hancom:hwpml:2011:common">
+
+  <!-- secPr (절대 삭제 금지) -->
+  <hp:p id="0" paraPrIDRef="0" styleIDRef="0">
+    <hp:secPr>
+      <hp:pageWidth val="59528"/>
+      <hp:pageHeight val="84188"/>
+      <hp:marginTop val="5668"/>
+      <hp:marginBottom val="4252"/>
+      <hp:marginLeft val="8504"/>
+      <hp:marginRight val="8504"/>
+      <hp:marginHeader val="4252"/>
+      <hp:marginFooter val="4252"/>
+      <hp:marginGutter val="0"/>
+      <hp:colPr type="none" colCount="1" sameSz="0" sameGap="0"/>
+    </hp:secPr>
+  </hp:p>
+
+  <!-- 제목 -->
+  <hp:p id="1" paraPrIDRef="1" styleIDRef="1">
+    <hp:r charPrIDRef="1">
+      <hp:t>회의록</hp:t>
+    </hp:r>
+  </hp:p>
+
+  <!-- 메타 정보 표 -->
+  <hp:p id="2" paraPrIDRef="0" styleIDRef="0">
+    <hp:tbl borderFillIDRef="2" cellSpacing="0" colCount="4" rowCount="2">
+      <hp:colSz val="7088"/>
+      <hp:colSz val="14176"/>
+      <hp:colSz val="7088"/>
+      <hp:colSz val="14176"/>
+
+      <hp:tr>
+        <hp:tc borderFillIDRef="3">
+          <hp:cellAddr colAddr="0" rowAddr="0"/>
+          <hp:cellSpan colSpan="1" rowSpan="1"/>
+          <hp:cellSz width="7088" height="1800"/>
+          <hp:cellMargin left="510" right="510" top="142" bottom="142"/>
+          <hp:p id="10" paraPrIDRef="1" styleIDRef="0">
+            <hp:r charPrIDRef="3"><hp:t>회의명</hp:t></hp:r>
+          </hp:p>
+        </hp:tc>
+        <hp:tc borderFillIDRef="2">
+          <hp:cellAddr colAddr="1" rowAddr="0"/>
+          <hp:cellSpan colSpan="1" rowSpan="1"/>
+          <hp:cellSz width="14176" height="1800"/>
+          <hp:cellMargin left="510" right="510" top="142" bottom="142"/>
+          <hp:p id="11" paraPrIDRef="2" styleIDRef="0">
+            <hp:r charPrIDRef="0"><hp:t>{{회의명}}</hp:t></hp:r>
+          </hp:p>
+        </hp:tc>
+        <hp:tc borderFillIDRef="3">
+          <hp:cellAddr colAddr="2" rowAddr="0"/>
+          <hp:cellSpan colSpan="1" rowSpan="1"/>
+          <hp:cellSz width="7088" height="1800"/>
+          <hp:cellMargin left="510" right="510" top="142" bottom="142"/>
+          <hp:p id="12" paraPrIDRef="1" styleIDRef="0">
+            <hp:r charPrIDRef="3"><hp:t>일시</hp:t></hp:r>
+          </hp:p>
+        </hp:tc>
+        <hp:tc borderFillIDRef="2">
+          <hp:cellAddr colAddr="3" rowAddr="0"/>
+          <hp:cellSpan colSpan="1" rowSpan="1"/>
+          <hp:cellSz width="14176" height="1800"/>
+          <hp:cellMargin left="510" right="510" top="142" bottom="142"/>
+          <hp:p id="13" paraPrIDRef="2" styleIDRef="0">
+            <hp:r charPrIDRef="0"><hp:t>{{일시}}</hp:t></hp:r>
+          </hp:p>
+        </hp:tc>
+      </hp:tr>
+
+      <hp:tr>
+        <hp:tc borderFillIDRef="3">
+          <hp:cellAddr colAddr="0" rowAddr="1"/>
+          <hp:cellSpan colSpan="1" rowSpan="1"/>
+          <hp:cellSz width="7088" height="1800"/>
+          <hp:cellMargin left="510" right="510" top="142" bottom="142"/>
+          <hp:p id="14" paraPrIDRef="1" styleIDRef="0">
+            <hp:r charPrIDRef="3"><hp:t>장소</hp:t></hp:r>
+          </hp:p>
+        </hp:tc>
+        <hp:tc borderFillIDRef="2">
+          <hp:cellAddr colAddr="1" rowAddr="1"/>
+          <hp:cellSpan colSpan="1" rowSpan="1"/>
+          <hp:cellSz width="14176" height="1800"/>
+          <hp:cellMargin left="510" right="510" top="142" bottom="142"/>
+          <hp:p id="15" paraPrIDRef="2" styleIDRef="0">
+            <hp:r charPrIDRef="0"><hp:t>{{장소}}</hp:t></hp:r>
+          </hp:p>
+        </hp:tc>
+        <hp:tc borderFillIDRef="3">
+          <hp:cellAddr colAddr="2" rowAddr="1"/>
+          <hp:cellSpan colSpan="1" rowSpan="1"/>
+          <hp:cellSz width="7088" height="1800"/>
+          <hp:cellMargin left="510" right="510" top="142" bottom="142"/>
+          <hp:p id="16" paraPrIDRef="1" styleIDRef="0">
+            <hp:r charPrIDRef="3"><hp:t>참석자</hp:t></hp:r>
+          </hp:p>
+        </hp:tc>
+        <hp:tc borderFillIDRef="2">
+          <hp:cellAddr colAddr="3" rowAddr="1"/>
+          <hp:cellSpan colSpan="1" rowSpan="1"/>
+          <hp:cellSz width="14176" height="1800"/>
+          <hp:cellMargin left="510" right="510" top="142" bottom="142"/>
+          <hp:p id="17" paraPrIDRef="2" styleIDRef="0">
+            <hp:r charPrIDRef="0"><hp:t>{{참석자}}</hp:t></hp:r>
+          </hp:p>
+        </hp:tc>
+      </hp:tr>
+    </hp:tbl>
+  </hp:p>
+
+  <!-- 안건 -->
+  <hp:p id="20" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="2"><hp:t>안건</hp:t></hp:r>
+  </hp:p>
+  <hp:p id="21" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t>{{안건}}</hp:t></hp:r>
+  </hp:p>
+
+  <!-- 논의 사항 -->
+  <hp:p id="22" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="2"><hp:t>논의 사항</hp:t></hp:r>
+  </hp:p>
+  <hp:p id="23" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t>{{논의사항}}</hp:t></hp:r>
+  </hp:p>
+
+  <!-- 결정 사항 -->
+  <hp:p id="24" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="2"><hp:t>결정 사항</hp:t></hp:r>
+  </hp:p>
+  <hp:p id="25" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t>{{결정사항}}</hp:t></hp:r>
+  </hp:p>
+
+  <!-- 후속 조치 -->
+  <hp:p id="26" paraPrIDRef="2" styleIDRef="0">
+    <hp:r charPrIDRef="2"><hp:t>후속 조치</hp:t></hp:r>
+  </hp:p>
+  <hp:p id="27" paraPrIDRef="0" styleIDRef="0">
+    <hp:r charPrIDRef="0"><hp:t>{{후속조치}}</hp:t></hp:r>
+  </hp:p>
+
+</hs:sec>
