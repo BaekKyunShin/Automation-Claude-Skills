@@ -1,120 +1,156 @@
 #!/usr/bin/env python3
-"""템플릿 + 콘텐츠 JSON으로 HWPX 문서를 조립."""
+"""템플릿 + 콘텐츠 JSON으로 HWPX 문서를 조립. python-hwpx 기반."""
 import argparse
 import json
 import os
 import shutil
 import sys
 
-try:
-    from lxml import etree
-except ImportError:
-    import xml.etree.ElementTree as etree
+from hwpx import HwpxDocument
 
-NS_HP = "urn:hancom:hwpml:2011"
-NS_HS = "urn:hancom:hwpml:2011:section"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(os.path.dirname(SCRIPT_DIR), "templates")
 
 
-def load_template(template_dir: str, output_dir: str):
-    """템플릿을 output_dir로 복사."""
-    if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
-    shutil.copytree(template_dir, output_dir)
-
-
-def build_section(content_json: dict, output_dir: str, p_id_start: int = 2):
-    """content JSON을 파싱해서 section0.xml에 단락/표를 추가."""
-    section_path = os.path.join(output_dir, "Contents", "section0.xml")
-    tree = etree.parse(section_path)
-    root = tree.getroot()
-
-    # 기존 빈 단락 제거 (secPr 단락은 유지)
-    paragraphs = list(root.iter(f"{{{NS_HP}}}p"))
-    for p in paragraphs[1:]:  # 첫 번째(secPr) 유지
-        parent = _find_parent(root, p)
-        if parent is not None:
-            parent.remove(p)
-
-    p_id = p_id_start
-    sec_elem = root if root.tag == f"{{{NS_HS}}}sec" else root.find(f".//{{{NS_HS}}}sec")
-    if sec_elem is None:
-        sec_elem = root
+def build_from_template(template_dir: str, content_json: dict, output_path: str):
+    """템플릿을 기반으로 콘텐츠를 채운 HWPX 문서를 생성."""
+    # 템플릿 .hwpx가 있으면 열기, 디렉터리면 먼저 패킹
+    hwpx_path = _ensure_hwpx(template_dir)
+    doc = HwpxDocument.open(hwpx_path)
 
     for item in content_json.get("paragraphs", []):
         item_type = item.get("type", "text")
 
         if item_type == "heading":
             level = item.get("level", 1)
-            char_pr = "1" if level == 1 else "2"
-            para_pr = "1" if level == 1 else "2"
-            p = _make_paragraph(p_id, para_pr, char_pr, item.get("text", ""))
-            p_id += 1
-            sec_elem.append(p)
+            char_pr = 1 if level == 1 else 2
+            para_pr = 1 if level == 1 else 2
+            doc.add_paragraph(
+                item.get("text", ""),
+                char_pr_id_ref=char_pr,
+                para_pr_id_ref=para_pr,
+                style_id_ref=level,
+            )
 
         elif item_type == "text":
-            p = _make_paragraph(p_id, "0", "0", item.get("text", ""))
-            p_id += 1
-            sec_elem.append(p)
+            doc.add_paragraph(item.get("text", ""))
 
         elif item_type == "table":
-            # table_gen 모듈 사용
-            sys.path.insert(0, SCRIPT_DIR)
-            from table_gen import create_table
             rows = item.get("rows", 2)
             cols = item.get("cols", 2)
             data = item.get("data", None)
             merge = item.get("merge", None)
-            tbl = create_table(rows, cols, data, merge, p_id_start=p_id)
-            # 표를 감싸는 단락
-            wrapper_p = etree.SubElement(sec_elem, f"{{{NS_HP}}}p", {
-                "id": str(p_id), "paraPrIDRef": "0", "styleIDRef": "0"
-            })
-            p_id += rows * cols + 1
-            wrapper_p.append(tbl)
 
-    # 저장
-    try:
-        tree.write(section_path, encoding="UTF-8", xml_declaration=True, pretty_print=True)
-    except TypeError:
-        tree.write(section_path, encoding="UTF-8", xml_declaration=True)
+            tbl = doc.add_table(rows, cols)
 
+            # 셀 내용 채우기
+            if data:
+                for ri, row in enumerate(data):
+                    for ci, cell_text in enumerate(row):
+                        if ri < rows and ci < cols:
+                            tbl.set_cell_text(ri, ci, str(cell_text))
 
-def _make_paragraph(p_id, para_pr_id, char_pr_id, text):
-    p = etree.Element(f"{{{NS_HP}}}p", {
-        "id": str(p_id), "paraPrIDRef": str(para_pr_id), "styleIDRef": "0"
-    })
-    r = etree.SubElement(p, f"{{{NS_HP}}}r", {"charPrIDRef": str(char_pr_id)})
-    t = etree.SubElement(r, f"{{{NS_HP}}}t")
-    t.text = text
-    return p
+            # 셀 병합
+            if merge:
+                for m in merge:
+                    sr, sc = m["row"], m["col"]
+                    er = sr + m.get("rowSpan", 1) - 1
+                    ec = sc + m.get("colSpan", 1) - 1
+                    if er > sr or ec > sc:
+                        tbl.merge_cells(sr, sc, er, ec)
+
+    doc.save_to_path(output_path)
+    print(f"OK: {output_path}")
 
 
-def _find_parent(root, target):
-    for parent in root.iter():
-        for child in parent:
-            if child is target:
-                return parent
-    return None
+def build_new(content_json: dict, output_path: str):
+    """빈 문서에서 콘텐츠를 채운 HWPX 문서를 생성."""
+    doc = HwpxDocument.new()
+
+    for item in content_json.get("paragraphs", []):
+        item_type = item.get("type", "text")
+
+        if item_type == "heading":
+            level = item.get("level", 1)
+            char_pr = 1 if level == 1 else 2
+            para_pr = 1 if level == 1 else 2
+            doc.add_paragraph(
+                item.get("text", ""),
+                char_pr_id_ref=char_pr,
+                para_pr_id_ref=para_pr,
+            )
+
+        elif item_type == "text":
+            doc.add_paragraph(item.get("text", ""))
+
+        elif item_type == "table":
+            rows = item.get("rows", 2)
+            cols = item.get("cols", 2)
+            data = item.get("data", None)
+            merge = item.get("merge", None)
+
+            tbl = doc.add_table(rows, cols)
+
+            if data:
+                for ri, row in enumerate(data):
+                    for ci, cell_text in enumerate(row):
+                        if ri < rows and ci < cols:
+                            tbl.set_cell_text(ri, ci, str(cell_text))
+
+            if merge:
+                for m in merge:
+                    sr, sc = m["row"], m["col"]
+                    er = sr + m.get("rowSpan", 1) - 1
+                    ec = sc + m.get("colSpan", 1) - 1
+                    if er > sr or ec > sc:
+                        tbl.merge_cells(sr, sc, er, ec)
+
+    doc.save_to_path(output_path)
+    print(f"OK: {output_path}")
+
+
+def _ensure_hwpx(template_dir: str) -> str:
+    """디렉터리 템플릿을 임시 .hwpx로 패킹."""
+    if template_dir.endswith(".hwpx") and os.path.isfile(template_dir):
+        return template_dir
+
+    import tempfile
+    import zipfile
+    tmp = tempfile.NamedTemporaryFile(suffix=".hwpx", delete=False)
+    tmp.close()
+
+    mimetype_path = os.path.join(template_dir, "mimetype")
+    with zipfile.ZipFile(tmp.name, "w", zipfile.ZIP_DEFLATED) as zf:
+        if os.path.isfile(mimetype_path):
+            zf.write(mimetype_path, "mimetype", compress_type=zipfile.ZIP_STORED)
+        for root, dirs, files in os.walk(template_dir):
+            for f in sorted(files):
+                full = os.path.join(root, f)
+                arcname = os.path.relpath(full, template_dir)
+                if arcname == "mimetype":
+                    continue
+                zf.write(full, arcname)
+
+    return tmp.name
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="템플릿 기반 HWPX 문서 조립")
-    parser.add_argument("--template", required=True, help="템플릿 디렉터리 경로")
+    parser = argparse.ArgumentParser(description="템플릿 기반 HWPX 문서 조립 (python-hwpx)")
+    parser.add_argument("--template", help="템플릿 디렉터리 또는 .hwpx 파일")
     parser.add_argument("--content", required=True, help="콘텐츠 JSON 파일")
-    parser.add_argument("--output", required=True, help="출력 디렉터리")
+    parser.add_argument("--output", required=True, help="출력 .hwpx 파일 경로")
     args = parser.parse_args()
-
-    if not os.path.isdir(args.template):
-        print(f"ERROR: 템플릿 없음: {args.template}", file=sys.stderr)
-        sys.exit(2)
 
     with open(args.content, "r", encoding="utf-8") as f:
         content = json.load(f)
 
-    load_template(args.template, args.output)
-    build_section(content, args.output)
+    if args.template:
+        if not os.path.exists(args.template):
+            print(f"ERROR: 템플릿 없음: {args.template}", file=sys.stderr)
+            sys.exit(2)
+        build_from_template(args.template, content, args.output)
+    else:
+        build_new(content, args.output)
 
-    print(f"OK: {args.output}")
-    print("다음 단계: fix_namespaces.py → validate_hwpx.py → pack_hwpx.py")
+    print("다음 단계: validate_hwpx.py → (완료)")

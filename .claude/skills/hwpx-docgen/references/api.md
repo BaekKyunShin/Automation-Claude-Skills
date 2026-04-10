@@ -1,83 +1,80 @@
 # hwpx-docgen 스크립트 API 레퍼런스
 
-모든 스크립트는 `scripts/` 디렉터리에 있으며 Python 3.6+로 실행합니다.
+모든 스크립트는 `scripts/` 디렉터리에 있으며 **python-hwpx 2.9+** 기반입니다.
+
+**사전 설치**: `pip install python-hwpx lxml`
 
 ---
 
 ## 일반 규칙
 
 - 종료 코드: `0` 성공, `1` 검증 실패, `2` 치명적 오류
-- 체이닝 순서: `unpack → (편집) → fix_namespaces → validate → pack`
-- 모든 경로는 상대/절대 모두 지원
+- 모든 스크립트는 `.hwpx` 파일을 직접 입출력 (언팩 불필요)
+- 네임스페이스는 python-hwpx가 내부 관리 → `fix_namespaces.py` 불필요
 
 ---
 
-## 스크립트 목록
+## 스크립트 목록 (9개)
 
-### unpack_hwpx.py
+### build_hwpx.py
 ```
-python scripts/unpack_hwpx.py <input.hwpx> <output_dir>
+python scripts/build_hwpx.py --template <dir_or_hwpx> --content <json> --output <output.hwpx>
+python scripts/build_hwpx.py --content <json> --output <output.hwpx>  # 템플릿 없이 신규
 ```
-HWPX ZIP을 디렉터리로 해제. 필수 파일 누락 시 WARN 출력.
+`HwpxDocument.open()` 또는 `.new()`로 문서 생성. 콘텐츠 JSON의 heading/text/table을 `add_paragraph()`/`add_table()`로 추가.
 
-### pack_hwpx.py
+### table_gen.py
 ```
-python scripts/pack_hwpx.py <input_dir> <output.hwpx>
+python scripts/table_gen.py --rows <n> --cols <m> --data '<json>' [--merge '<json>'] [--output <file.hwpx>]
 ```
-디렉터리를 HWPX ZIP으로 패킹. mimetype을 첫 번째 엔트리로 ZIP_STORED.
-
-### fix_namespaces.py
-```
-python scripts/fix_namespaces.py <work_dir>
-```
-모든 XML 파일의 `ns0:`/`ns1:` 접두사를 정규 OWPML 접두사로 복원.
+`doc.add_table()` → `tbl.set_cell_text()` → `tbl.merge_cells()`로 표 생성. 출력 생략 시 마크다운 미리보기.
 
 ### extract_text.py
 ```
-python scripts/extract_text.py <work_dir> --format <plain|markdown|json>
+python scripts/extract_text.py <file.hwpx> --format <plain|markdown|json>
 ```
-HWPX에서 텍스트 추출. 표도 포맷에 맞게 변환.
-
-### analyze_template.py
-```
-python scripts/analyze_template.py <template_dir>
-```
-페이지 크기, 단락/표 수, charPr/paraPr/스타일/borderFill 목록, 플레이스홀더 탐지.
+`doc.export_text()`, `doc.export_markdown()`, `TextExtractor`로 추출.
 
 ### validate_hwpx.py
 ```
-python scripts/validate_hwpx.py <dir_or_hwpx>
+python scripts/validate_hwpx.py <file.hwpx_or_dir>
 ```
-ZIP 구조, secPr 존재, charPrIDRef/paraPrIDRef 참조 무결성 검증. PASS/WARN/FAIL 보고.
+`doc.validate()` 내장 검증 + 디렉터리 모드 시 ZIP 구조 체크. PASS/WARN/FAIL 보고.
+
+### analyze_template.py
+```
+python scripts/analyze_template.py <file.hwpx>
+```
+`doc.char_properties`, `doc.paragraph_properties`, `doc.styles`, `doc.border_fills`로 메타데이터 분석. 플레이스홀더 `{{...}}` 자동 탐지.
 
 ### zip_replace_all.py
 ```
 python scripts/zip_replace_all.py <work_dir> --mapping <json_file> [--auto-fix-ns]
 ```
-모든 XML에서 `{{key}}`를 `value`로 전역 치환. `--auto-fix-ns` 시 자동 네임스페이스 정리.
+모든 XML에서 `{{key}}`를 `value`로 전역 치환. 문자열 레벨 (XML 파싱 없음).
 
-**매핑 JSON 형식:**
-```json
-{"{{이름}}": "홍길동", "{{날짜}}": "2026-04-10"}
+### unpack_hwpx.py
 ```
+python scripts/unpack_hwpx.py <input.hwpx> <output_dir>
+```
+HWPX ZIP을 디렉터리로 해제. 필수 파일 누락 시 WARN.
 
-### table_gen.py
+### pack_hwpx.py
 ```
-python scripts/table_gen.py --rows <n> --cols <m> --data '<json>' [--merge '<json>'] [--output <file>]
+python scripts/pack_hwpx.py <input_dir> <output.hwpx>
 ```
-HWPX 호환 `hp:tbl` XML 생성. 병합, borderFill, 셀 여백 자동 처리.
-
-**data**: `[["a","b"], ["c","d"]]`
-**merge**: `[{"row":0, "col":0, "rowSpan":1, "colSpan":2}]`
-
-### build_hwpx.py
-```
-python scripts/build_hwpx.py --template <dir> --content <json> --output <dir>
-```
-템플릿 복사 후 콘텐츠 JSON으로 section0.xml 생성. heading/text/table 타입 지원.
+디렉터리를 HWPX ZIP으로 패킹. mimetype 첫 번째 엔트리 + ZIP_STORED.
 
 ### page_guard.py
 ```
-python scripts/page_guard.py <dir> --ref-pages <n>
+python scripts/page_guard.py <file.hwpx> --ref-pages <n>
 ```
-예상 페이지 수를 기준값과 비교. 경고만 출력 (차단 안 함). 근사치 추정.
+`doc.paragraphs` 수 기반 페이지 추정. 경고만 출력 (차단 안 함).
+
+---
+
+## 삭제된 스크립트
+
+| 스크립트 | 삭제 이유 |
+|---|---|
+| `fix_namespaces.py` | python-hwpx가 네임스페이스를 내부 관리 → 불필요 |

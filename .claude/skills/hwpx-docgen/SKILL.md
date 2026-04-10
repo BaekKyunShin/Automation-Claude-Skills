@@ -70,9 +70,7 @@ python scripts/build_hwpx.py --template templates/<type>/ --content content.json
 ### Step 5: 후처리
 
 ```bash
-python scripts/fix_namespaces.py work/
-python scripts/validate_hwpx.py work/
-python scripts/pack_hwpx.py work/ output.hwpx
+python scripts/validate_hwpx.py output.hwpx
 ```
 
 ### Step 6: 결과 전달
@@ -226,8 +224,7 @@ python scripts/analyze_template.py templates/<new_name>/
 
 ### 네임스페이스
 
-- XML 편집 후 반드시 `fix_namespaces.py` 실행.
-- `ns0:`, `ns1:` 접두사가 보이면 네임스페이스가 깨진 것. 즉시 정리 필요.
+- python-hwpx가 네임스페이스를 내부 관리. 별도 정리 불필요.
 
 ### ZIP 구조
 
@@ -246,9 +243,8 @@ python scripts/analyze_template.py templates/<new_name>/
 
 ### 의존성
 
-- **필수**: Python 3.6+
-- **권장**: `pip install lxml` (네임스페이스 처리 안정성). 미설치 시 `xml.etree` 폴백.
-- **pyhwpx/python-hwpx 사용 금지** — lxml + stdlib만 사용.
+- **필수**: Python 3.8+, `pip install python-hwpx lxml`
+- python-hwpx가 문서 생성·편집·추출·검증을 담당. lxml은 python-hwpx 내부 의존성.
 
 ## 추가 리소스
 
