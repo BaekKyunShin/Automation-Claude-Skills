@@ -11,7 +11,7 @@ SKILL.md 또는 scripts를 수정한 후 smoke test로 사용하세요.
 ```
 
 **확인할 것:**
-- `gonmun/` 템플릿 사용
+- `templates/gonmun.hwpx` 템플릿 사용
 - `{{발신기관}}`, `{{수신}}`, `{{제목}}` 플레이스홀더 치환
 - 출력 `.hwpx` 파일이 `validate_hwpx.py` PASS
 - 한컴오피스에서 열었을 때 공문 서식 유지
@@ -25,24 +25,24 @@ SKILL.md 또는 scripts를 수정한 후 smoke test로 사용하세요.
 ```
 
 **확인할 것:**
-- `table_gen.py`로 3x4 표 생성
-- 첫 행에 `borderFillIDRef="3"` (회색 배경 헤더)
-- 데이터 행에 `borderFillIDRef="2"` (흰 배경)
-- `charPrIDRef="3"` (헤더 굵게) 적용
+- `doc.add_table(3, 4)`로 표 생성
 - 셀 내용 정확히 매핑
+- `validate_hwpx.py` PASS
+- 한컴오피스에서 표 정상 렌더링
 
 ---
 
 ## Query 3 — 기존 문서 편집 (플레이스홀더 치환)
 
 ```
-/hwpx-docgen report.hwpx에서 {{작성자}}를 "신백균"으로, {{작성일}}을 "2026-04-10"으로 바꿔줘
+/hwpx-docgen templates/report.hwpx에서 {{작성자}}를 "신백균"으로, {{작성일}}을 "2026-04-10"으로 바꿔줘
 ```
 
 **확인할 것:**
-- `unpack_hwpx.py` → `zip_replace_all.py` → `validate_hwpx.py` → `pack_hwpx.py` 순서 실행
-- 모든 XML 파일에서 치환 적용 (ZIP-level 전역)
-- 네임스페이스 깨지지 않음
+- `zip_replace_all.py` 또는 `doc.replace_text_in_runs()` 사용
+- 본문 단락 + 표 셀 내부 모두 치환 적용
+- OWPML 구조 유지 (네임스페이스 깨지지 않음)
+- `validate_hwpx.py` PASS
 
 ---
 
@@ -53,8 +53,8 @@ SKILL.md 또는 scripts를 수정한 후 smoke test로 사용하세요.
 ```
 
 **확인할 것:**
-- `analyze_template.py` 실행: 페이지 크기, 단락 수, 표 수, 스타일 목록 보고
-- `extract_text.py --format markdown` 실행: 표를 마크다운 표로 변환
+- `analyze_template.py` 실행: 단락 수, 표 수, 스타일 목록 보고
+- `extract_text.py --format markdown` 실행: 텍스트 추출
 - `validate_hwpx.py` 실행: 구조 검증 결과 포함
 
 ---
@@ -66,7 +66,7 @@ SKILL.md 또는 scripts를 수정한 후 smoke test로 사용하세요.
 ```
 
 **확인할 것:**
-- 5개 템플릿 (base, gonmun, report, minutes, proposal) 목록 반환
+- `templates/` 내 5개 `.hwpx` 파일 (base, gonmun, report, minutes, proposal) 목록 반환
 - 각 템플릿의 용도와 플레이스홀더 목록 포함
 
 ---

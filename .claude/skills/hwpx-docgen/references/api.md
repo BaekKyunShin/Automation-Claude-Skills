@@ -1,6 +1,6 @@
 # hwpx-docgen 스크립트 API 레퍼런스
 
-모든 스크립트는 `scripts/` 디렉터리에 있으며 **python-hwpx 2.9+** 기반입니다.
+모든 스크립트는 `scripts/` 디렉터리에 있으며 **python-hwpx** 기반입니다.
 
 **사전 설치**: `pip install python-hwpx lxml`
 
@@ -9,19 +9,26 @@
 ## 일반 규칙
 
 - 종료 코드: `0` 성공, `1` 검증 실패, `2` 치명적 오류
-- 모든 스크립트는 `.hwpx` 파일을 직접 입출력 (언팩 불필요)
-- 네임스페이스는 python-hwpx가 내부 관리 → `fix_namespaces.py` 불필요
+- 모든 스크립트는 `.hwpx` 파일을 직접 입출력
+- 네임스페이스는 python-hwpx가 내부 관리
 
 ---
 
-## 스크립트 목록 (9개)
+## 스크립트 목록 (8개)
 
 ### build_hwpx.py
 ```
-python scripts/build_hwpx.py --template <dir_or_hwpx> --content <json> --output <output.hwpx>
+python scripts/build_hwpx.py --template <name_or_hwpx> --content <json> --output <output.hwpx>
 python scripts/build_hwpx.py --content <json> --output <output.hwpx>  # 템플릿 없이 신규
 ```
-`HwpxDocument.open()` 또는 `.new()`로 문서 생성. 콘텐츠 JSON의 heading/text/table을 `add_paragraph()`/`add_table()`로 추가.
+`HwpxDocument.open()` 또는 `.new()`로 문서 생성. 플레이스홀더 치환 + heading/text/table 추가. 표 셀 내부 플레이스홀더도 치환.
+
+### generate_templates.py
+```
+python scripts/generate_templates.py              # 전체 템플릿 재생성
+python scripts/generate_templates.py gonmun        # 특정 템플릿만
+```
+python-hwpx Skeleton 기반 프로페셔널 `.hwpx` 템플릿 생성. 커스텀 charPr(폰트/크기/굵기), paraPr(정렬) 적용.
 
 ### table_gen.py
 ```
@@ -33,48 +40,28 @@ python scripts/table_gen.py --rows <n> --cols <m> --data '<json>' [--merge '<jso
 ```
 python scripts/extract_text.py <file.hwpx> --format <plain|markdown|json>
 ```
-`doc.export_text()`, `doc.export_markdown()`, `TextExtractor`로 추출.
+`doc.export_text()`, `doc.export_markdown()` 또는 구조화 JSON으로 추출.
 
 ### validate_hwpx.py
 ```
-python scripts/validate_hwpx.py <file.hwpx_or_dir>
+python scripts/validate_hwpx.py <file.hwpx>
 ```
-`doc.validate()` 내장 검증 + 디렉터리 모드 시 ZIP 구조 체크. PASS/WARN/FAIL 보고.
+`doc.validate()` 내장 검증. PASS/WARN/FAIL 보고.
 
 ### analyze_template.py
 ```
 python scripts/analyze_template.py <file.hwpx>
 ```
-`doc.char_properties`, `doc.paragraph_properties`, `doc.styles`, `doc.border_fills`로 메타데이터 분석. 플레이스홀더 `{{...}}` 자동 탐지.
+문서 메타데이터 분석: 단락/표 수, 스타일, 플레이스홀더 `{{...}}` 자동 탐지.
 
 ### zip_replace_all.py
 ```
-python scripts/zip_replace_all.py <work_dir> --mapping <json_file> [--auto-fix-ns]
+python scripts/zip_replace_all.py <input.hwpx> --mapping <json_file> [--output <output.hwpx>]
 ```
-모든 XML에서 `{{key}}`를 `value`로 전역 치환. 문자열 레벨 (XML 파싱 없음).
-
-### unpack_hwpx.py
-```
-python scripts/unpack_hwpx.py <input.hwpx> <output_dir>
-```
-HWPX ZIP을 디렉터리로 해제. 필수 파일 누락 시 WARN.
-
-### pack_hwpx.py
-```
-python scripts/pack_hwpx.py <input_dir> <output.hwpx>
-```
-디렉터리를 HWPX ZIP으로 패킹. mimetype 첫 번째 엔트리 + ZIP_STORED.
+`doc.replace_text_in_runs()` + 표 셀 내부 순회로 플레이스홀더 치환. OWPML 구조 안전 유지.
 
 ### page_guard.py
 ```
 python scripts/page_guard.py <file.hwpx> --ref-pages <n>
 ```
-`doc.paragraphs` 수 기반 페이지 추정. 경고만 출력 (차단 안 함).
-
----
-
-## 삭제된 스크립트
-
-| 스크립트 | 삭제 이유 |
-|---|---|
-| `fix_namespaces.py` | python-hwpx가 네임스페이스를 내부 관리 → 불필요 |
+단락/표 수 기반 페이지 추정. 경고만 출력 (차단 안 함).

@@ -22,16 +22,24 @@
 
 ## 현재 설치된 스킬
 
-| 스킬 | 출처 | 용도 |
-|---|---|---|
-| `ez-skill-search` | 죠르디 공유 (초안) | 다른 Claude Code 스킬을 웹에서 탐색·비교·추천 |
+| 스킬 | 용도 |
+|---|---|
+| `ez-skill-search` | 다른 Claude Code 스킬을 웹에서 탐색·비교·추천 |
+| `hwpx-docgen` | HWPX 한글 문서 생성·편집·분석·표 만들기 |
 
-## 개발 브랜치
+## 사용 방법
 
-- `claude/review-agent-skills-s7Zui` — 스킬 리뷰 및 신규 스킬 개발
+```bash
+git clone https://github.com/BaekKyunShin/Automation-Claude-Skills.git
+cd Automation-Claude-Skills
+python -m venv .venv
+source .venv/bin/activate
+pip install python-hwpx lxml
+claude
+```
 
-## 워크플로우 (죠르디 방법론)
-
-1. **Step 1**: 스킬 검색 스킬(`ez-skill-search`)로 원하는 기능의 기존 스킬들을 수집
-2. **Step 2**: 수집된 스킬들의 장점을 합성한 신규 스킬 초안 생성
-3. **Step 3**: 내 도메인(KPC) 지식으로 업데이트. 필요 시 YouTube URL 등 외부 자료를 추가 학습
+Claude Code 세션에서 자연어로 요청:
+```
+> 공문 만들어줘. 발신: 한국생산성본부, 수신: 삼육대학교, 제목: 협조 요청
+> 내양식.hwpx에 이름을 홍길동으로 채워줘
+```
