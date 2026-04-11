@@ -13,8 +13,8 @@ def estimate_pages(hwpx_path: str) -> int:
     para_count = len(doc.paragraphs)
     table_count = 0
     try:
-        tables = doc.oxml.findall(".//{urn:hancom:hwpml:2011}tbl")
-        table_count = len(tables) if tables else 0
+        for para in doc.paragraphs:
+            table_count += len(para.tables)
     except Exception:
         pass
 

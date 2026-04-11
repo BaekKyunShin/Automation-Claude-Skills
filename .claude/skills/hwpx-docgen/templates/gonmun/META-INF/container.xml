@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<container xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
-  <rootfiles>
-    <rootfile full-path="Contents/content.hpf" media-type="application/hwpml-package+xml"/>
-  </rootfiles>
-</container>
