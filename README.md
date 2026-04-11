@@ -97,6 +97,7 @@ Automation-Claude-Skills/
 | 스킬 | 트리거 키워드 | 용도 |
 |---|---|---|
 | `hwpx-docgen` | 한글 문서, HWPX, 생성, 편집, 분석, 표 | HWPX 한글 문서 생성·편집·분석·표 만들기 |
+| `skill-finder` | 스킬 찾아줘, find skill, search skills | 9개 검증 소스에서 Claude Code 스킬 검색·비교·추천 |
 
 ---
 
