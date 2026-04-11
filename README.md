@@ -24,7 +24,6 @@
 
 | 스킬 | 용도 |
 |---|---|
-| `ez-skill-search` | 다른 Claude Code 스킬을 웹에서 탐색·비교·추천 |
 | `hwpx-docgen` | HWPX 한글 문서 생성·편집·분석·표 만들기 |
 
 ## 사용 방법
