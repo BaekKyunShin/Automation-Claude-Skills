@@ -260,7 +260,7 @@ python scripts/generate_templates.py gonmun     # 특정 템플릿만
 
 - XML 파일을 직접 생성하거나 편집하지 않습니다.
 - 디렉터리 기반 템플릿을 사용하지 않습니다 (.hwpx 파일만 사용).
-- `unpack_hwpx.py` → 직접 XML 편집 → `pack_hwpx.py` 경로를 사용하지 않습니다.
+- 레거시 `unpack → 직접 XML 편집 → pack` 워크플로우는 더 이상 지원되지 않습니다. python-hwpx API만 사용하세요.
 - python-hwpx Skeleton에 없는 네임스페이스나 요소를 임의로 추가하지 않습니다.
 
 ### 검증
